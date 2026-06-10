@@ -1,10 +1,3 @@
-## 04 · 隐私政策正文
-
-> 部署到 GitHub Pages 后即得公开 URL，填到 Dev Console "隐私政策" 字段。  
-> 部署步骤见本文末尾。
-
----
-
 # CosmoTab 隐私政策
 
 **最后更新：2026-06-10**
@@ -57,7 +50,7 @@ CosmoTab 是一个**纯本地运行**的浏览器扩展。我们：
 
 ## 4. 网络请求
 
-CosmoTab 不会主动发起任何网络请求。  
+CosmoTab 不会主动发起任何网络请求。
 （站点 favicon 由 Chrome 内置 `chrome://favicon/` 提供，不经过我们任何服务器。）
 
 ---
@@ -82,33 +75,5 @@ CosmoTab 不针对 13 岁以下儿童收集数据。
 
 ## 8. 联系我们
 
-- GitHub Issues: https://github.com/Leonxlnx/CosmoTab/issues
-- Email: （你的真实邮箱）
-
----
-
-## 部署到 GitHub Pages 步骤
-
-```bash
-# 1. 在仓库根创建 docs/ 目录并放入 privacy.md
-mkdir -p docs
-cp release/04-privacy-policy.md docs/privacy.md
-
-# 2. 提交
-git add docs/
-git commit -m "docs: add privacy policy"
-git push
-```
-
-然后到 GitHub 仓库 → **Settings → Pages**：
-- **Source**: `Deploy from a branch`
-- **Branch**: `main` / 目录选 `/docs`
-- 保存后等约 1 分钟
-
-最终 URL（替换成你的用户名/仓库名）：
-
-```
-https://leonxlnx.github.io/CosmoTab/privacy
-```
-
-把这个 URL 粘到 Dev Console "隐私政策 URL" 字段。
+- GitHub Issues: https://github.com/xionglay34-prog/CosmoTab/issues
+- Email: xionglay34@gmail.com

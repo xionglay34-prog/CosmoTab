@@ -82,8 +82,8 @@ CosmoTab 不针对 13 岁以下儿童收集数据。
 
 ## 8. 联系我们
 
-- GitHub Issues: https://github.com/Leonxlnx/CosmoTab/issues
-- Email: （你的真实邮箱）
+- GitHub Issues: https://github.com/xionglay34-prog/CosmoTab/issues
+- Email: xionglay34@gmail.com
 
 ---
 
