@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@500;700;900&display=swap');
+
+html, body, #root {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+  font-family: "ZCOOL KuaiLe", "Ma Shan Zheng", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+}
+
+.overlay-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* === 横向滚动催命 === */
+.Horizontal {
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.Horizontal__text {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  gap: 1.2vw;
+  padding-left: 100vw;
+  will-change: transform;
+}
+
+.Horizontal__char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.heading-xl {
+  font-size: clamp(3rem, 10.5vw, 12rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #1c1c1e;
+  font-family: "ZCOOL KuaiLe", "Ma Shan Zheng", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
+  /* 深色字 + 多层白色描边，浅色 / 深色页面都能清晰看见 */
+  text-shadow:
+    -2px -2px 0 #ffffff,
+     2px -2px 0 #ffffff,
+    -2px  2px 0 #ffffff,
+     2px  2px 0 #ffffff,
+    -3px  0   0 #ffffff,
+     3px  0   0 #ffffff,
+     0   -3px 0 #ffffff,
+     0    3px 0 #ffffff,
+     0    8px 24px rgba(0, 0, 0, 0.18);
+}

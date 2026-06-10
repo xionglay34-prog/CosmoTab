@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!--
+    CosmoTab brand mark v2:
+    iOS-style rounded square with blue gradient + three stacked folders + sparkle.
+    Folders represent grouped tabs being tidied; sparkle = "magic organize".
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#6f8cff"/>
+      <stop offset="100%" stop-color="#4f63f7"/>
+    </linearGradient>
+
+    <linearGradient id="folderBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#dde4ff" stop-opacity="0.55"/>
+    </linearGradient>
+
+    <linearGradient id="folderMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#e6ecff" stop-opacity="0.85"/>
+    </linearGradient>
+
+    <linearGradient id="folderFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f3f6ff"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Rounded square container (iOS-style squircle approximation) -->
+  <rect x="8" y="8" width="112" height="112" rx="26" ry="26" fill="url(#bg)"/>
+
+  <!-- Subtle inner highlight at top -->
+  <rect x="8" y="8" width="112" height="60" rx="26" ry="26"
+        fill="#ffffff" opacity="0.06"/>
+
+  <!-- Folder shape generator: tab + body, rounded corners.
+       Coordinates designed for a 64-wide folder. -->
+
+  <!-- Back folder (offset up + right) -->
+  <g transform="translate(38 36)">
+    <path d="
+      M 4 4
+      Q 4 0 8 0
+      L 22 0
+      Q 24 0 25.5 1.5
+      L 28.5 4.5
+      Q 30 6 32 6
+      L 60 6
+      Q 64 6 64 10
+      L 64 36
+      Q 64 40 60 40
+      L 4 40
+      Q 0 40 0 36
+      L 0 8
+      Q 0 4 4 4
+      Z" fill="url(#folderBack)" filter="url(#softShadow)"/>
+  </g>
+
+  <!-- Middle folder (slight offset) -->
+  <g transform="translate(34 44)">
+    <path d="
+      M 4 4
+      Q 4 0 8 0
+      L 22 0
+      Q 24 0 25.5 1.5
+      L 28.5 4.5
+      Q 30 6 32 6
+      L 60 6
+      Q 64 6 64 10
+      L 64 38
+      Q 64 42 60 42
+      L 4 42
+      Q 0 42 0 38
+      L 0 8
+      Q 0 4 4 4
+      Z" fill="url(#folderMid)"/>
+  </g>
+
+  <!-- Front folder (bottom, largest visible) -->
+  <g transform="translate(30 54)">
+    <path d="
+      M 4 4
+      Q 4 0 8 0
+      L 22 0
+      Q 24 0 25.5 1.5
+      L 28.5 4.5
+      Q 30 6 32 6
+      L 64 6
+      Q 68 6 68 10
+      L 68 40
+      Q 68 44 64 44
+      L 4 44
+      Q 0 44 0 40
+      L 0 8
+      Q 0 4 4 4
+      Z" fill="url(#folderFront)"/>
+  </g>
+
+  <!-- 4-point sparkle on front folder -->
+  <g transform="translate(78 78)" fill="url(#bg)">
+    <path d="
+      M 0 -10
+      C 1.2 -3.2 2.8 -1.6 9.6 -0.4
+      C 2.8 0.8 1.2 2.4 0 9.2
+      C -1.2 2.4 -2.8 0.8 -9.6 -0.4
+      C -2.8 -1.6 -1.2 -3.2 0 -10 Z"/>
+  </g>
+</svg>

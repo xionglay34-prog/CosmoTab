@@ -1,0 +1,432 @@
+/* 极简黑白卡片风（Excalidraw Virgil 默认手写字体） */
+
+/* @import 必须放在所有规则之前（@charset / 空 @layer 除外） */
+
+/* LXGW WenKai 霞鹜文楷 —— 中文手写楷体（按 Unicode 子集分包加载，首屏仅几十 KB） */
+@import url('https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Regular/result.css');
+
+/* 中文字体 fallback —— 偏手写体，更接近 Virgil 视觉感 */
+@import url('https://fonts.googleapis.com/css2?family=Long+Cang&family=Liu+Jian+Mao+Cao&family=Ma+Shan+Zheng&display=swap');
+
+/* ZCOOL KuaiLe 站酷快乐体 —— 中文正文主字体 */
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
+/* Virgil —— Excalidraw 默认手写字体（本地，仅含拉丁字符） */
+@font-face {
+  font-family: 'Virgil';
+  src: url('/fonts/Virgil.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+  unicode-range: U+0020-007E, U+00A0-024F, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F;
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f4ef;       /* 轻微暖色调，去除数字感 */
+  --ink: #1f1d1b;            /* 暖黑 */
+  --ink-soft: #6b6a66;
+  --ink-faint: #c4c1bb;
+  --accent: #1f1d1b;
+  --warn: #d94a3d;           /* 降饱和的暖红 */
+  --line: #ece9e2;
+  /* 暖灰染色阴影 + 收紧扩散半径 */
+  --shadow:
+    0 0.5px 1.5px rgba(60, 50, 40, 0.06),
+    0 6px 18px rgba(60, 50, 40, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+#root { padding: 12px; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  /* Virgil 仅含拉丁字符，中文走 ZCOOL KuaiLe 站酷快乐体 */
+  font-family: "Virgil", "ZCOOL KuaiLe", "LXGW WenKai", "Long Cang", "Ma Shan Zheng", "STKaiti", "Kaiti SC", "Comic Sans MS", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.card-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 18px 22px 14px 22px;
+  background: var(--bg);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 0.5px rgba(60, 50, 40, 0.10),
+    var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.titlebar {
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  letter-spacing: 0.5px;
+}
+.titlebar .title {
+  display: none;
+}
+.titlebar .hint {
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  font-family: "SF Mono", "Menlo", monospace;
+  letter-spacing: 0.4px;
+  text-transform: lowercase;
+}
+
+.tab-row {
+  display: flex;
+  gap: 2px;
+  -webkit-app-region: no-drag;
+  background: var(--bg-soft);
+  padding: 3px;
+  border-radius: 11px;
+}
+.tab-row button {
+  -webkit-app-region: no-drag;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  padding: 4px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease;
+  letter-spacing: 0.2px;
+}
+.tab-row button:hover { color: var(--ink); }
+.tab-row button.active {
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px rgba(60, 50, 40, 0.06),
+    0 0 0 0.5px rgba(60, 50, 40, 0.04);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  -webkit-app-region: no-drag;
+  user-select: text;
+}
+
+textarea.note {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--ink);
+  padding: 4px 0;
+  letter-spacing: -0.1px;
+}
+textarea.note::placeholder {
+  color: var(--ink-faint);
+  white-space: pre-line;
+}
+
+/* Todo 输入 */
+.todo-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: var(--bg-soft);
+  border-radius: 11px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  transition: box-shadow .18s ease;
+}
+.todo-input:focus-within {
+  box-shadow:
+    0 0 0 2px rgba(31, 29, 27, 0.06),
+    0 0 0 0.5px rgba(31, 29, 27, 0.18);
+}
+.todo-input::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-faint);
+  flex-shrink: 0;
+}
+.todo-input input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+}
+.todo-input input::placeholder { color: var(--ink-faint); }
+.todo-input .preview {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-weight: 500;
+}
+
+/* Todo 列表 */
+.todo-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+.todo-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.todo-list li:last-child { border-bottom: none; }
+.todo-list li.done .text {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+}
+.todo-list .checkbox {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--ink-faint);
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 1px;
+  cursor: pointer;
+  position: relative;
+  background: transparent;
+  transition: all .15s;
+}
+.todo-list .checkbox:hover { border-color: var(--ink-soft); }
+.todo-list li.done .checkbox {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.todo-list li.done .checkbox::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: solid var(--bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -2px);
+  width: 5px;
+  height: 9px;
+}
+.todo-list .text {
+  flex: 1;
+  word-break: break-word;
+  line-height: 20px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.todo-list .due {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin-top: 3px;
+  font-weight: 500;
+}
+.todo-list .due.warn {
+  color: var(--warn);
+  font-weight: 600;
+}
+.todo-list .delete {
+  background: transparent;
+  border: none;
+  color: var(--ink-faint);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+  font-family: inherit;
+  line-height: 1;
+}
+.todo-list .delete:hover { color: var(--warn); }
+
+/* 笔记区：苹果备忘录风格 —— 所见即所得 contentEditable */
+.note-rich {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  /* 正文中文优先使用 ZCOOL KuaiLe 站酷快乐体；拉丁字符仍可走 Virgil */
+  font-family: "Virgil", "ZCOOL KuaiLe", "LXGW WenKai", "STKaiti", "Kaiti SC", "Comic Sans MS", system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.85;          /* 中文需要更多行间呼吸 */
+  color: var(--ink);
+  padding: 4px 2px;
+  letter-spacing: 0.1px;       /* 中文不再使用负字距 */
+  user-select: text;
+  cursor: text;
+  text-wrap: pretty;
+}
+.note-rich:empty::before,
+.note-rich[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+.note-rich p {
+  margin: 0 0 6px 0;
+}
+.note-rich h1, .note-rich h2, .note-rich h3 {
+  margin: 10px 0 6px 0;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+.note-rich h1 { font-size: 20px; }
+.note-rich h2 { font-size: 17px; }
+.note-rich h3 { font-size: 15.5px; }
+.note-rich ul, .note-rich ol {
+  margin: 4px 0 8px 0;
+  padding-left: 24px;
+}
+.note-rich ul ul, .note-rich ol ol,
+.note-rich ul ol, .note-rich ol ul {
+  margin: 2px 0 2px 0;
+}
+.note-rich ol { list-style-type: decimal; }
+.note-rich ol ol { list-style-type: lower-alpha; }
+.note-rich ol ol ol { list-style-type: lower-roman; }
+.note-rich ul { list-style-type: disc; }
+.note-rich ul ul { list-style-type: circle; }
+.note-rich ul ul ul { list-style-type: square; }
+.note-rich li {
+  margin: 2px 0;
+  padding-left: 2px;
+}
+.note-rich li::marker {
+  color: var(--ink-soft);
+}
+.note-rich img {
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  margin: 6px 0;
+  display: block;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  user-select: none;
+}
+.note-rich img.selected,
+.note-rich img:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.note-rich a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-faint);
+  text-underline-offset: 3px;
+}
+.note-rich code {
+  font-family: "SF Mono", "JetBrains Mono", "Menlo", monospace;
+  background: var(--bg-soft);
+  padding: 1.5px 6px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.note-rich blockquote {
+  margin: 6px 0;
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--ink);
+  color: var(--ink-soft);
+}
+
+/* 底部工具栏 —— 去掉 border-top，改用呼吸间距取代切割线 */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  -webkit-app-region: no-drag;
+  padding-top: 6px;
+  font-family: "SF Mono", "Menlo", monospace;
+  letter-spacing: 0.3px;
+}
+.toolbar .left, .toolbar .right { display: flex; gap: 12px; align-items: center; }
+.toolbar .brand {
+  font-family: "Virgil", "ZCOOL KuaiLe", system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  /* 去掉下划线，避免与上方"双横线"切割感 */
+  line-height: 1;
+}
+.toolbar .kbd-hint {
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.3px;
+}
+/* 工具栏按钮：默认无边框、低噪点；hover 才浮现描边 */
+.toolbar button {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease;
+  letter-spacing: 0.2px;
+}
+.toolbar button:hover {
+  color: var(--ink);
+  background: var(--bg-soft);
+  border-color: var(--line);
+}
+.toolbar button:active {
+  transform: scale(0.97);
+}
+
+/* 滚动条：极细、低存在感 */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+  transition: background .2s;
+}
+.note-rich:hover::-webkit-scrollbar-thumb,
+.todo-list:hover::-webkit-scrollbar-thumb {
+  background: var(--ink-faint);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-soft) !important; }
+::-webkit-scrollbar-track { background: transparent; }
