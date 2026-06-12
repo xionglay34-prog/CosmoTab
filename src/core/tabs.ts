@@ -65,11 +65,20 @@ export async function organizeAll(opts: {
   const remainingAll = await queryAllTabs();
   const remaining = filterEligible(remainingAll, wlSet);
 
-  // 3) group within each window
+  // 3) sort first — by lastAccessed. Doing this before grouping avoids
+  //    chrome.tabs.move() inserting an unrelated tab between two same-domain
+  //    tabs that already share a group (which Chrome would auto-add to that
+  //    group). After sort, grouping pulls same-domain tabs adjacent without
+  //    contaminating other tabs.
+  await applySort(opts.sortScope, remaining, lastAccessed);
+
+  // 4) group within each window (re-query because sort moved things around)
+  const refreshed = await queryAllTabs();
+  const refreshedEligible = filterEligible(refreshed, wlSet);
   let groupsCreated = 0;
   let grouped = 0;
   const byWin = new Map<number, TabInfo[]>();
-  for (const t of remaining) {
+  for (const t of refreshedEligible) {
     let arr = byWin.get(t.windowId);
     if (!arr) {
       arr = [];
@@ -78,14 +87,12 @@ export async function organizeAll(opts: {
     arr.push(t);
   }
   for (const [winId, arr] of byWin) {
-    const groups = groupByDomain(arr).filter((g) => g.tabs.length >= 2);
-    grouped += groups.reduce((acc, g) => acc + g.tabs.length, 0);
+    const groups = groupByDomain(arr);
+    grouped += groups
+      .filter((g) => g.tabs.length >= 2)
+      .reduce((acc, g) => acc + g.tabs.length, 0);
     groupsCreated += await applyTabGroups(winId, groups);
   }
-
-  // 4) sort
-  const refreshed = await queryAllTabs();
-  await applySort(opts.sortScope, filterEligible(refreshed, wlSet), lastAccessed);
 
   return {
     closed: toClose.length,
@@ -138,7 +145,7 @@ export async function groupOnly(): Promise<number> {
   }
   let created = 0;
   for (const [winId, arr] of byWin) {
-    const groups = groupByDomain(arr).filter((g) => g.tabs.length >= 2);
+    const groups = groupByDomain(arr);
     created += await applyTabGroups(winId, groups);
   }
   return created;

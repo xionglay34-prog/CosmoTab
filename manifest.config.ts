@@ -3,10 +3,10 @@ import { defineManifest } from '@crxjs/vite-plugin';
 export default defineManifest({
   manifest_version: 3,
   name: 'CosmoTab',
-  version: '0.1.0',
+  version: '0.1.1',
   description:
     '一键整理浏览器标签页：按域名分组 · 智能去重 · 最近访问排序 · 撤销关闭。给爆炸的标签页一个宇宙般的归位仪式。',
-  homepage_url: 'https://github.com/Leonxlnx/CosmoTab',
+  homepage_url: 'https://github.com/xionglay34-prog/CosmoTab',
   action: {
     default_title: 'CosmoTab · 打开侧边栏',
   },

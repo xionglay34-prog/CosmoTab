@@ -1,3 +1,4 @@
+import { safeHostname } from './grouping';
 import type { LastAccessedMap, SortScope, TabInfo } from './types';
 
 export function sortByLastAccessed(
@@ -8,9 +9,40 @@ export function sortByLastAccessed(
 }
 
 /**
+ * 把同域名的 tab 物理排在一起，同时整体按"最近访问"优先：
+ * 1) 按 hostname 分簇
+ * 2) 簇之间：按簇内最大 lastAccessed 降序（最近用过的域名排前）
+ * 3) 簇之内：按 lastAccessed 降序
+ */
+export function clusterByDomain(
+  tabs: TabInfo[],
+  lastAccessed: LastAccessedMap,
+): TabInfo[] {
+  const buckets = new Map<string, TabInfo[]>();
+  for (const t of tabs) {
+    const host = safeHostname(t.url);
+    let arr = buckets.get(host);
+    if (!arr) {
+      arr = [];
+      buckets.set(host, arr);
+    }
+    arr.push(t);
+  }
+  const clusters = [...buckets.values()].map((arr) => sortByLastAccessed(arr, lastAccessed));
+  clusters.sort((a, b) => {
+    const am = Math.max(...a.map((t) => lastAccessed[t.id] ?? 0));
+    const bm = Math.max(...b.map((t) => lastAccessed[t.id] ?? 0));
+    return bm - am;
+  });
+  return clusters.flat();
+}
+
+/**
  * 根据 scope 把 tab 移动到正确顺序。
  * - perWindow：每个窗口内独立排序。
  * - merged：所有非 pinned tab 合并按全局顺序排序。
+ *
+ * 排序结果：同域名 tab 紧贴在一起，整体按最近访问的域名优先。
  */
 export async function applySort(
   scope: SortScope,
@@ -28,7 +60,7 @@ export async function applySort(
       arr.push(t);
     }
     for (const [, arr] of byWin) {
-      const sorted = sortByLastAccessed(arr, lastAccessed);
+      const sorted = clusterByDomain(arr, lastAccessed);
       for (let i = 0; i < sorted.length; i++) {
         const t = sorted[i];
         if (!t) continue;
@@ -43,7 +75,7 @@ export async function applySort(
   }
 
   // merged: 把所有 tab 合并到第一个窗口，并按全局顺序排列
-  const sorted = sortByLastAccessed(tabs, lastAccessed);
+  const sorted = clusterByDomain(tabs, lastAccessed);
   const firstWin = sorted[0]?.windowId;
   if (firstWin == null) return;
   for (let i = 0; i < sorted.length; i++) {
